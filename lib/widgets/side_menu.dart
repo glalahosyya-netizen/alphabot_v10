@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../theme/app_theme.dart';
+import '../screens/centers_screen.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({super.key});
@@ -66,21 +66,36 @@ class SideMenu extends StatelessWidget {
             ),
             const Divider(color: AppColors.border, height: 1),
             const SizedBox(height: 8),
-            const _MenuItem(
+            _MenuItem(
               icon: Icons.home_rounded,
               label: 'الرئيسية',
+              onTap: () {
+                Navigator.of(context).pop();
+              },
             ),
-            const _MenuItem(
-              icon: Icons.mic_none_rounded,
-              label: 'الأوامر الصوتية',
+            _MenuItem(
+              icon: Icons.grid_view_rounded,
+              label: 'المراكز الرئيسية',
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const CentersScreen()),
+                );
+              },
             ),
-            const _MenuItem(
+            _MenuItem(
               icon: Icons.tune_rounded,
               label: 'الإعدادات',
+              onTap: () {
+                Navigator.of(context).pop();
+              },
             ),
-            const _MenuItem(
+            _MenuItem(
               icon: Icons.info_outline_rounded,
               label: 'حول التطبيق',
+              onTap: () {
+                Navigator.of(context).pop();
+              },
             ),
             const Spacer(),
             Padding(
@@ -104,8 +119,9 @@ class SideMenu extends StatelessWidget {
 class _MenuItem extends StatelessWidget {
   final IconData icon;
   final String label;
+  final VoidCallback onTap;
 
-  const _MenuItem({required this.icon, required this.label});
+  const _MenuItem({required this.icon, required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +134,7 @@ class _MenuItem extends StatelessWidget {
           fontSize: 14,
         ),
       ),
-      onTap: () => Navigator.of(context).pop(),
+      onTap: onTap,
     );
   }
 }
