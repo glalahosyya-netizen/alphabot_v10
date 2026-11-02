@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import 'intelligence_center_screen.dart'; 
 
 class CentersScreen extends StatelessWidget {
   const CentersScreen({super.key});
@@ -38,38 +39,56 @@ class CentersScreen extends StatelessWidget {
           itemCount: centers.length,
           itemBuilder: (context, index) {
             final center = centers[index];
-            return Container(
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.border),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    center['icon'] as IconData,
-                    size: 45,
-                    color: center['color'] as Color,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    center['title'] as String,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+            return GestureDetector(
+              onTap: () {
+                if (index == 0) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const IntelligenceCenterScreen(),
                     ),
-                  ),
-                ],
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('هذا المركز قيد التطوير في المراحل القادمة!'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.border),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      center['icon'] as IconData,
+                      size: 45,
+                      color: center['color'] as Color,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      center['title'] as String,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: AppColors.textPrimary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           },
