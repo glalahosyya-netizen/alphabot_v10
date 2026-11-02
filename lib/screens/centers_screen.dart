@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
-import 'intelligence_center_screen.dart'; 
+import 'intelligence_center_screen.dart';
 
 class CentersScreen extends StatelessWidget {
   const CentersScreen({super.key});
