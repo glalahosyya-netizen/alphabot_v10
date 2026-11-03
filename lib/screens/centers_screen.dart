@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'intelligence_center_screen.dart';
 
 class CentersScreen extends StatelessWidget {
   const CentersScreen({super.key});
@@ -7,23 +6,85 @@ class CentersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('المراكز')),
-      body: ListView(
-        children: [
-          ListTile(
-            title: const Text('مركز الذكاء'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const IntelligenceCenterScreen()),
-              );
-            },
-          ),
-          const ListTile(title: Text('الأعمال والمشاريع')),
-          const ListTile(title: Text('الإبداع والإنتاج')),
-          const ListTile(title: Text('الأجهزة والشبكات')),
-        ],
+      backgroundColor: const Color(0xFF05070D),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF0B1220),
+        title: const Text(
+          'المراكز الرئيسية',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: GridView.count(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF0B1220),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFF1E2A44)),
+              ),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.psychology, size: 45, color: Colors.blueAccent),
+                  SizedBox(height: 12),
+                  Text('مركز الذكاء', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF0B1220),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFF1E2A44)),
+              ),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.work, size: 45, color: Colors.greenAccent),
+                  SizedBox(height: 12),
+                  Text('الأعمال والمشاريع', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF0B1220),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFF1E2A44)),
+              ),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.palette, size: 45, color: Colors.purpleAccent),
+                  SizedBox(height: 12),
+                  Text('الإبداع والإنتاج', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF0B1220),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFF1E2A44)),
+              ),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.devices, size: 45, color: Colors.orangeAccent),
+                  SizedBox(height: 12),
+                  Text('الأجهزة والشبكات', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
-}
+} 
