@@ -7,52 +7,42 @@ class CentersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF05070D),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0B1220),
-        title: const Text('المراكز الرئيسية', style: TextStyle(color: Colors.white)),
+        title: const Text('المراكز الرئيسية'),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
         children: [
-          _buildCard(context, 'مركز الذكاء', Icons.psychology, Colors.blueAccent, true),
-          _buildCard(context, 'الأعمال والمشاريع', Icons.work, Colors.greenAccent, false),
-          _buildCard(context, 'الإبداع والإنتاج', Icons.palette, Colors.purpleAccent, false),
-          _buildCard(context, 'الأجهزة والشبكات', Icons.devices, Colors.orangeAccent, false),
-          _buildCard(context, 'الأمان والخصوصية', Icons.security, Colors.redAccent, false),
-          _buildCard(context, 'الإعدادات والتطوير', Icons.settings, Colors.tealAccent, false),
+          ListTile(
+            leading: const Icon(Icons.psychology),
+            title: const Text('مركز الذكاء'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const IntelligenceCenterScreen()),
+              );
+            },
+          ),
+          const ListTile(
+            leading: Icon(Icons.work),
+            title: Text('الأعمال والمشاريع'),
+          ),
+          const ListTile(
+            leading: Icon(Icons.palette),
+            title: Text('الإبداع والإنتاج'),
+          ),
+          const ListTile(
+            leading: Icon(Icons.devices),
+            title: Text('الأجهزة والشبكات'),
+          ),
+          const ListTile(
+            leading: Icon(Icons.security),
+            title: Text('الأمان والخصوصية'),
+          ),
+          const ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('الإعدادات والتطوير'),
+          ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildCard(BuildContext context, String title, IconData icon, Color color, bool isCenter) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: GestureDetector(
-        onTap: () {
-          if (isCenter) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const IntelligenceCenterScreen()),
-            );
-          }
-        },
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: const Color(0xFF0B1220),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFF1E2A44)),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, size: 40, color: color),
-              const SizedBox(width: 16),
-              Text(title, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-            ],
-          ),
-        ),
       ),
     );
   }
