@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'intelligence_center_screen.dart';
 
 class CentersScreen extends StatelessWidget {
   const CentersScreen({super.key});
@@ -22,19 +23,27 @@ class CentersScreen extends StatelessWidget {
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFF0B1220),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFF1E2A44)),
-              ),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.psychology, size: 45, color: Colors.blueAccent),
-                  SizedBox(height: 12),
-                  Text('مركز الذكاء', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                ],
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const IntelligenceCenterScreen()),
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0B1220),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: const Color(0xFF1E2A44)),
+                ),
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.psychology, size: 45, color: Colors.blueAccent),
+                    SizedBox(height: 12),
+                    Text('مركز الذكاء', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  ],
+                ),
               ),
             ),
             Container(
@@ -79,6 +88,36 @@ class CentersScreen extends StatelessWidget {
                   Icon(Icons.devices, size: 45, color: Colors.orangeAccent),
                   SizedBox(height: 12),
                   Text('الأجهزة والشبكات', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF0B1220),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFF1E2A44)),
+              ),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.security, size: 45, color: Colors.redAccent),
+                  SizedBox(height: 12),
+                  Text('الأمان والخصوصية', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF0B1220),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFF1E2A44)),
+              ),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.settings, size: 45, color: Colors.tealAccent),
+                  SizedBox(height: 12),
+                  Text('الإعدادات والتطوير', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
