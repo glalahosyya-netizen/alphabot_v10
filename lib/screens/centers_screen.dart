@@ -10,67 +10,33 @@ class CentersScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text(
-          'المراكز الرئيسية',
-          style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: AppColors.primary),
+        backgroundColor: AppColors.surface,
+        title: const Text('المراكز', style: TextStyle(color: AppColors.textPrimary)),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+      body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const IntelligenceCenterScreen(),
-                    ),
-                  );
-                },
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.border),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'مركز الذكاء',
-                      style: TextStyle(
-                        color: Colors.blueAccent,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const IntelligenceCenterScreen()),
+                );
+              },
+              child: const Text(
+                'دخول مركز الذكاء',
+                style: TextStyle(fontSize: 18, color: Colors.black),
               ),
             ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: AppColors.border),
-                ),
-                child: const Center(
-                  child: Text(
-                    'باقي المراكز (قريباً)',
-                    style: TextStyle(
-                      color: AppColors.textMuted,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ),
+            const SizedBox(height: 20),
+            const Text(
+              'باقي المراكز قريباً...',
+              style: TextStyle(color: AppColors.textMuted, fontSize: 16),
             ),
           ],
         ),
