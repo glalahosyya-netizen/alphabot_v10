@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
+import 'intelligence_center_screen.dart';
 
 class CentersScreen extends StatelessWidget {
   const CentersScreen({super.key});
@@ -6,11 +8,27 @@ class CentersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('المراكز')),
-      body: const Center(
-        child: Text(
-          'قيد الإنشاء',
-          style: TextStyle(fontSize: 24),
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        backgroundColor: AppColors.surface,
+        title: const Text('المراكز', style: TextStyle(color: AppColors.textPrimary)),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const IntelligenceCenterScreen()),
+                );
+              },
+              child: const Text('مركز الذكاء'),
+            ),
+            const SizedBox(height: 20),
+            const Text('باقي المراكز قريباً...', style: TextStyle(color: Colors.white)),
+          ],
         ),
       ),
     );
