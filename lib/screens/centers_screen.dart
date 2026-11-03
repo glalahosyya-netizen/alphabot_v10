@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import '{package:flutter/material.dart}';
 import '../theme/app_theme.dart';
 import 'intelligence_center_screen.dart';
 
@@ -7,15 +7,6 @@ class CentersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final centers = [
-      {'title': 'مركز الذكاء', 'icon': Icons.psychology, 'color': Colors.blueAccent},
-      {'title': 'الأعمال والمشاريع', 'icon': Icons.work, 'color': Colors.greenAccent},
-      {'title': 'الإبداع والإنتاج', 'icon': Icons.palette, 'color': Colors.purpleAccent},
-      {'title': 'الأجهزة والشبكات', 'icon': Icons.devices, 'color': Colors.orangeAccent},
-      {'title': 'الأمان والخصوصية', 'icon': Icons.security, 'color': Colors.redAccent},
-      {'title': 'الإعدادات والتطوير', 'icon': Icons.settings, 'color': Colors.tealAccent},
-    ];
-
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -28,67 +19,80 @@ class CentersScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-          ),
-          itemCount: centers.length,
-          itemBuilder: (context, index) {
-            final center = centers[index];
-            return GestureDetector(
+        child: GridView.count(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          children: [
+            GestureDetector(
               onTap: () {
-                if (index == 0) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const IntelligenceCenterScreen()),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('${center['title']} قيد التطوير'),
-                      duration: const Duration(seconds: 1),
-                    ),
-                  );
-                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const IntelligenceCenterScreen()),
+                );
               },
               child: Container(
                 decoration: BoxDecoration(
                   color: AppColors.surface,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: AppColors.border),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 10,
-                      offset: const Offset(0, 5),
-                    ),
-                  ],
                 ),
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      center['icon'] as IconData,
-                      size: 45,
-                      color: center['color'] as Color,
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      center['title'] as String,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: AppColors.textPrimary,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    Icon(Icons.psychology, size: 45, color: Colors.blueAccent),
+                    SizedBox(height: 12),
+                    Text('مركز الذكاء', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
-            );
-          },
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.work, size: 45, color: Colors.greenAccent),
+                  SizedBox(height: 12),
+                  Text('الأعمال والمشاريع', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.palette, size: 45, color: Colors.purpleAccent),
+                  SizedBox(height: 12),
+                  Text('الإبداع والإنتاج', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.devices, size: 45, color: Colors.orangeAccent),
+                  SizedBox(height: 12),
+                  Text('الأجهزة والشبكات', style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
