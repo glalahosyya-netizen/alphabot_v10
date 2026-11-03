@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import 'intelligence_center_screen.dart';
 
 class CentersScreen extends StatelessWidget {
   const CentersScreen({super.key});
@@ -38,12 +39,19 @@ class CentersScreen extends StatelessWidget {
             final center = centers[index];
             return GestureDetector(
               onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('${center['title']} قيد التطوير'),
-                    duration: const Duration(seconds: 1),
-                  ),
-                );
+                if (index == 0) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const IntelligenceCenterScreen()),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('${center['title']} قيد التطوير'),
+                      duration: const Duration(seconds: 1),
+                    ),
+                  );
+                }
               },
               child: Container(
                 decoration: BoxDecoration(
