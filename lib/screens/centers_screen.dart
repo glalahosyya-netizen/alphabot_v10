@@ -91,39 +91,9 @@ class CentersScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFF0B1220),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFF1E2A44)),
-              ),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.security, size: 45, color: Colors.redAccent),
-                  SizedBox(height: 12),
-                  Text('الأمان والخصوصية', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                ],
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFF0B1220),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFF1E2A44)),
-              ),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.settings, size: 45, color: Colors.tealAccent),
-                  SizedBox(height: 12),
-                  Text('الإعدادات والتطوير', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                ],
-              ),
-            ),
           ],
         ),
       ),
     );
   }
-} 
+}
