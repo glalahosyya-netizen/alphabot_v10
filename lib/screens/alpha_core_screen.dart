@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import "dart:convert";
+import "package:shared_preferences/shared_preferences.dart";
 
 class AlphaCoreScreen extends StatefulWidget {
   const AlphaCoreScreen({super.key});
@@ -9,32 +11,49 @@ class AlphaCoreScreen extends StatefulWidget {
 
 class _AlphaCoreScreenState extends State<AlphaCoreScreen> {
   final TextEditingController _controller = TextEditingController();
-  final List<Map<String, String>> _messages = [
+  List<Map<String, String>> _messages = [
     {"role": "bot", "text": "أهلاً بك في Alpha Core. كيف يمكنني مساعدتك؟"}
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _loadMessages();
+  }
+
+  // دالة حفظ الرسائل في الجوال
+  Future<void> _saveMessages() async {
+    final prefs = await SharedPreferences.getInstance();
+    final encoded = jsonEncode(_messages);
+    await prefs.setString("alpha_chat_history", encoded);
+  }
+
+  // دالة تحميل الرسائل من الجوال
+  Future<void> _loadMessages() async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getString("alpha_chat_history");
+    if (saved != null) {
+      final decoded = jsonDecode(saved) as List;
+      setState(() {
+        _messages = decoded.map((e) => Map<String, String>.from(e)).toList();
+      });
+    }
+  }
+
   String _getBotResponse(String userText) {
     final text = userText.toLowerCase().trim();
-
     if (text.contains("سلام") || text.contains("مرحبا") || text.contains("هلا")) {
       return "وعليكم السلام ورحمة الله وبركاته! كيف حالك اليوم؟";
     }
-    if (text.contains("اسمك") || text.contains("من انت") || text.contains("مين انت")) {
+    if (text.contains("اسمك") || text.contains("من انت")) {
       return "أنا ألفا بوت، مساعدك الذكي الشخصي. الإصدار العاشر (V10).";
     }
     if (text.contains("اركان الاسلام") || text.contains("أركان الإسلام")) {
       return "أركان الإسلام خمسة: الشهادتان، الصلاة، الزكاة، صوم رمضان، وحج البيت لمن استطاع إليه سبيلاً.";
     }
-    if (text.contains("صلاه") || text.contains("صلاة")) {
-      return "الصلاة عماد الدين. هل تريد معرفة مواقيت الصلاة اليوم؟";
-    }
     if (text.contains("شكرا") || text.contains("مشكور")) {
       return "العفو! أنا دائماً في خدمتك.";
     }
-    if (text.contains("كيف حالك") || text.contains("اخبارك")) {
-      return "أنا بخير، شكراً لسؤالك! كيف يمكنني خدمتك اليوم؟";
-    }
-
     return "لقد استلمت رسالتك: \"$userText\". (أنا نسخة تجريبية، وسأتعلم المزيد قريباً!)";
   }
 
@@ -47,6 +66,15 @@ class _AlphaCoreScreenState extends State<AlphaCoreScreen> {
       _messages.add({"role": "bot", "text": _getBotResponse(userText)});
     });
     _controller.clear();
+    _saveMessages(); // حفظ الرسائل بعد كل إرسال
+  }
+
+  void _clearHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove("alpha_chat_history");
+    setState(() {
+      _messages = [{"role": "bot", "text": "تم مسح الذاكرة. أهلاً بك من جديد!"}];
+    });
   }
 
   @override
@@ -55,8 +83,15 @@ class _AlphaCoreScreenState extends State<AlphaCoreScreen> {
       backgroundColor: const Color(0xFF05070D),
       appBar: AppBar(
         backgroundColor: const Color(0xFF0B1220),
-        title: const Text("Alpha Core - العقل المركزي", style: TextStyle(color: Colors.white)),
+        title: const Text("Alpha Core", style: TextStyle(color: Colors.white)),
         iconTheme: const IconThemeData(color: Colors.blueAccent),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete_sweep, color: Colors.redAccent),
+            onPressed: _clearHistory,
+            tooltip: "مسح الذاكرة",
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -77,10 +112,7 @@ class _AlphaCoreScreenState extends State<AlphaCoreScreen> {
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(color: isUser ? Colors.blueAccent : const Color(0xFF1E2A44)),
                     ),
-                    child: Text(
-                      msg["text"]!,
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                    ),
+                    child: Text(msg["text"]!, style: const TextStyle(color: Colors.white, fontSize: 16)),
                   ),
                 );
               },
