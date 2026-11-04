@@ -13,13 +13,38 @@ class _AlphaCoreScreenState extends State<AlphaCoreScreen> {
     {"role": "bot", "text": "أهلاً بك في Alpha Core. كيف يمكنني مساعدتك؟"}
   ];
 
+  String _getBotResponse(String userText) {
+    final text = userText.toLowerCase().trim();
+
+    if (text.contains("سلام") || text.contains("مرحبا") || text.contains("هلا")) {
+      return "وعليكم السلام ورحمة الله وبركاته! كيف حالك اليوم؟";
+    }
+    if (text.contains("اسمك") || text.contains("من انت") || text.contains("مين انت")) {
+      return "أنا ألفا بوت، مساعدك الذكي الشخصي. الإصدار العاشر (V10).";
+    }
+    if (text.contains("اركان الاسلام") || text.contains("أركان الإسلام")) {
+      return "أركان الإسلام خمسة: الشهادتان، الصلاة، الزكاة، صوم رمضان، وحج البيت لمن استطاع إليه سبيلاً.";
+    }
+    if (text.contains("صلاه") || text.contains("صلاة")) {
+      return "الصلاة عماد الدين. هل تريد معرفة مواقيت الصلاة اليوم؟";
+    }
+    if (text.contains("شكرا") || text.contains("مشكور")) {
+      return "العفو! أنا دائماً في خدمتك.";
+    }
+    if (text.contains("كيف حالك") || text.contains("اخبارك")) {
+      return "أنا بخير، شكراً لسؤالك! كيف يمكنني خدمتك اليوم؟";
+    }
+
+    return "لقد استلمت رسالتك: \"$userText\". (أنا نسخة تجريبية، وسأتعلم المزيد قريباً!)";
+  }
+
   void _sendMessage() {
     if (_controller.text.trim().isEmpty) return;
     
+    final userText = _controller.text;
     setState(() {
-      _messages.add({"role": "user", "text": _controller.text});
-      // رد تجريبي من الروبوت (بدون ذكاء اصطناعي حقيقي حالياً)
-      _messages.add({"role": "bot", "text": "استلمت طلبك: ${_controller.text}. جاري التحليل..."});
+      _messages.add({"role": "user", "text": userText});
+      _messages.add({"role": "bot", "text": _getBotResponse(userText)});
     });
     _controller.clear();
   }
