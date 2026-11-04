@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
-
-import '../theme/app_theme.dart';
-import '../widgets/command_input.dart';
-import '../widgets/mic_button.dart';
-import '../widgets/pause_button.dart';
-import '../widgets/robot_face.dart';
-import '../widgets/side_menu.dart';
-import '../widgets/top_bar.dart';
+import "package:flutter/material.dart";
+import "../theme/app_theme.dart";
+import "../widgets/command_input.dart";
+import "../widgets/mic_button.dart";
+import "../widgets/pause_button.dart";
+import "../widgets/robot_face.dart";
+import "../widgets/side_menu.dart";
+import "../widgets/top_bar.dart";
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,13 +17,23 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _listening = false;
   bool _paused = false;
-  String _status = 'جاهز للاستماع';
+  String _status = "جاهز للاستماع";
 
   void _toggleMic() {
     setState(() {
       if (_paused) _paused = false;
       _listening = !_listening;
-      _status = _listening ? 'يستمع إليك الآن…' : 'جاهز للاستماع';
+      _status = _listening ? "يستمع إليك الآن..." : "جاهز للاستماع";
+      
+      if (_listening) {
+        // هنا نضيف تنبيه بسيط (محاكاة للاستماع)
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("جاري الاستماع إلى صوتك... (وضع تجريبي)"),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
     });
   }
 
@@ -33,16 +42,16 @@ class _HomeScreenState extends State<HomeScreen> {
       _paused = !_paused;
       if (_paused) {
         _listening = false;
-        _status = 'متوقف مؤقتًا';
+        _status = "متوقف مؤقتًا";
       } else {
-        _status = 'جاهز للاستماع';
+        _status = "جاهز للاستماع";
       }
     });
   }
 
   void _submitCommand(String value) {
     setState(() {
-      _status = 'الأمر: $value';
+      _status = "الأمر: $value";
     });
   }
 
@@ -54,9 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
         key: ValueKey(_status),
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: _paused
-              ? AppColors.textMuted
-              : AppColors.textPrimary.withOpacity(0.85),
+          color: _paused ? AppColors.textMuted : AppColors.textPrimary.withOpacity(0.85),
           fontSize: 14,
           letterSpacing: 0.4,
         ),
@@ -102,8 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: LayoutBuilder(
                     builder: (context, c) {
-                      final robotSize =
-                          (c.maxHeight * 0.58).clamp(120.0, 260.0);
+                      final robotSize = (c.maxHeight * 0.58).clamp(120.0, 260.0);
                       return SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
                         child: ConstrainedBox(
