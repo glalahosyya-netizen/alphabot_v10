@@ -26,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
       _status = _listening ? "يستمع إليك الآن..." : "جاهز للاستماع";
       
       if (_listening) {
-        // هنا نضيف تنبيه بسيط (محاكاة للاستماع)
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("جاري الاستماع إلى صوتك... (وضع تجريبي)"),
