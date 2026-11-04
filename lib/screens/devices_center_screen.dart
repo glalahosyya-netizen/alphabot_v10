@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "alpha_control_screen.dart";
 
 class DevicesCenterScreen extends StatelessWidget {
   const DevicesCenterScreen({super.key});
@@ -19,19 +20,19 @@ class DevicesCenterScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _buildModule(Icons.phone_android, "Alpha Control - التحكم بالهاتف"),
-          _buildModule(Icons.computer, "التحكم بكمبيوتر Windows"),
-          _buildModule(Icons.cast, "مشاركة الشاشة"),
-          _buildModule(Icons.wifi, "Alpha Net - الشبكات"),
-          _buildModule(Icons.audiotrack, "Alpha Audio - الصوت"),
-          _buildModule(Icons.offline_bolt, "المهام المحلية دون إنترنت"),
-          _buildModule(Icons.copy_all, "Alpha Twin - البيئة التجريبية"),
+          _buildModule(context, Icons.phone_android, "Alpha Control - التحكم بالهاتف", true),
+          _buildModule(context, Icons.computer, "التحكم بكمبيوتر Windows", false),
+          _buildModule(context, Icons.cast, "مشاركة الشاشة", false),
+          _buildModule(context, Icons.wifi, "Alpha Net - الشبكات", false),
+          _buildModule(context, Icons.audiotrack, "Alpha Audio - الصوت", false),
+          _buildModule(context, Icons.offline_bolt, "المهام المحلية دون إنترنت", false),
+          _buildModule(context, Icons.copy_all, "Alpha Twin - البيئة التجريبية", false),
         ],
       ),
     );
   }
 
-  Widget _buildModule(IconData icon, String title) {
+  Widget _buildModule(BuildContext context, IconData icon, String title, bool isControl) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
@@ -46,7 +47,14 @@ class DevicesCenterScreen extends StatelessWidget {
           style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
         ),
         trailing: const Icon(Icons.arrow_back_ios_new, color: Colors.grey, size: 16),
-        onTap: () {},
+        onTap: () {
+          if (isControl) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AlphaControlScreen()),
+            );
+          }
+        },
       ),
     );
   }
