@@ -3,7 +3,8 @@ import "dart:convert";
 import "package:shared_preferences/shared_preferences.dart";
 
 class AlphaCoreScreen extends StatefulWidget {
-  const AlphaCoreScreen({super.key});
+  final String? initialMessage;
+  const AlphaCoreScreen({super.key, this.initialMessage});
 
   @override
   State<AlphaCoreScreen> createState() => _AlphaCoreScreenState();
@@ -18,17 +19,25 @@ class _AlphaCoreScreenState extends State<AlphaCoreScreen> {
   @override
   void initState() {
     super.initState();
-    _loadMessages();
+    _init();
   }
 
-  // دالة حفظ الرسائل في الجوال
+  Future<void> _init() async {
+    await _loadMessages();
+    if (widget.initialMessage != null && widget.initialMessage!.isNotEmpty) {
+      setState(() {
+        _messages.add({"role": "user", "text": widget.initialMessage!});
+        _messages.add({"role": "bot", "text": _getBotResponse(widget.initialMessage!)});
+      });
+      _saveMessages();
+    }
+  }
+
   Future<void> _saveMessages() async {
     final prefs = await SharedPreferences.getInstance();
-    final encoded = jsonEncode(_messages);
-    await prefs.setString("alpha_chat_history", encoded);
+    await prefs.setString("alpha_chat_history", jsonEncode(_messages));
   }
 
-  // دالة تحميل الرسائل من الجوال
   Future<void> _loadMessages() async {
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString("alpha_chat_history");
@@ -59,14 +68,13 @@ class _AlphaCoreScreenState extends State<AlphaCoreScreen> {
 
   void _sendMessage() {
     if (_controller.text.trim().isEmpty) return;
-    
     final userText = _controller.text;
     setState(() {
       _messages.add({"role": "user", "text": userText});
       _messages.add({"role": "bot", "text": _getBotResponse(userText)});
     });
     _controller.clear();
-    _saveMessages(); // حفظ الرسائل بعد كل إرسال
+    _saveMessages();
   }
 
   void _clearHistory() async {
@@ -89,7 +97,6 @@ class _AlphaCoreScreenState extends State<AlphaCoreScreen> {
           IconButton(
             icon: const Icon(Icons.delete_sweep, color: Colors.redAccent),
             onPressed: _clearHistory,
-            tooltip: "مسح الذاكرة",
           ),
         ],
       ),
