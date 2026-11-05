@@ -4,22 +4,23 @@ import "package:url_launcher/url_launcher.dart";
 class AlphaControlScreen extends StatelessWidget {
   const AlphaControlScreen({super.key});
 
-  Future<void> _openCamera(BuildContext context) async {
-    final Uri cameraUrl = Uri.parse("camera://");
+  Future<void> _openSettings(BuildContext context) async {
+    final Uri settingsUri = Uri.parse("app-settings:");
+    
     try {
-      if (await canLaunchUrl(cameraUrl)) {
-        await launchUrl(cameraUrl);
+      if (await canLaunchUrl(settingsUri)) {
+        await launchUrl(settingsUri);
       } else {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("لا يمكن فتح الكاميرا على هذا الجهاز.")),
+            const SnackBar(content: Text("لا يمكن فتح الإعدادات على هذا الجهاز.")),
           );
         }
       }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("حدث خطأ أثناء محاولة فتح الكاميرا.")),
+          const SnackBar(content: Text("حدث خطأ أثناء محاولة فتح الإعدادات.")),
         );
       }
     }
@@ -38,10 +39,10 @@ class AlphaControlScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.camera_alt, size: 80, color: Colors.orangeAccent),
+            const Icon(Icons.settings, size: 80, color: Colors.orangeAccent),
             const SizedBox(height: 20),
             const Text(
-              "التحكم بالكاميرا",
+              "التحكم بإعدادات الهاتف",
               style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 30),
@@ -51,12 +52,12 @@ class AlphaControlScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               ),
               icon: const Icon(Icons.open_in_new, color: Colors.black),
-              label: const Text("فتح الكاميرا", style: TextStyle(color: Colors.black, fontSize: 18)),
-              onPressed: () => _openCamera(context),
+              label: const Text("فتح الإعدادات", style: TextStyle(color: Colors.black, fontSize: 18)),
+              onPressed: () => _openSettings(context),
             ),
           ],
         ),
       ),
     );
   }
-}
+} 
