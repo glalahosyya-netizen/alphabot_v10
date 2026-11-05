@@ -28,6 +28,7 @@ jobs:
         run: |
           flutter create --platforms=android --project-name alphabot_v10 --org com.alphabot /tmp/scaffold
           cp -R /tmp/scaffold/android ./android
+          sed -i '/<application/i \    <uses-permission android:name="android.permission.RECORD_AUDIO"/>' android/app/src/main/AndroidManifest.xml
 
       - name: Install dependencies
         run: flutter pub get
