@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "dart:convert";
 import "package:shared_preferences/shared_preferences.dart";
+import "package:url_launcher/url_launcher.dart";
 
 class AlphaCoreScreen extends StatefulWidget {
   final String? initialMessage;
@@ -13,7 +14,7 @@ class AlphaCoreScreen extends StatefulWidget {
 class _AlphaCoreScreenState extends State<AlphaCoreScreen> {
   final TextEditingController _controller = TextEditingController();
   List<Map<String, String>> _messages = [
-    {"role": "bot", "text": "أهلاً بك في Alpha Core. كيف يمكنني مساعدتك؟"}
+    {"role": "bot", "text": "أهلاً بك في Alpha Core. يمكنك سؤالي أو طلب فتح تطبيق (مثلاً: افتح يوتيوب)."}
   ];
 
   @override
@@ -25,11 +26,7 @@ class _AlphaCoreScreenState extends State<AlphaCoreScreen> {
   Future<void> _init() async {
     await _loadMessages();
     if (widget.initialMessage != null && widget.initialMessage!.isNotEmpty) {
-      setState(() {
-        _messages.add({"role": "user", "text": widget.initialMessage!});
-        _messages.add({"role": "bot", "text": _getBotResponse(widget.initialMessage!)});
-      });
-      _saveMessages();
+      _processUserMessage(widget.initialMessage!);
     }
   }
 
@@ -49,32 +46,54 @@ class _AlphaCoreScreenState extends State<AlphaCoreScreen> {
     }
   }
 
-  String _getBotResponse(String userText) {
-    final text = userText.toLowerCase().trim();
-    if (text.contains("سلام") || text.contains("مرحبا") || text.contains("هلا")) {
-      return "وعليكم السلام ورحمة الله وبركاته! كيف حالك اليوم؟";
-    }
-    if (text.contains("اسمك") || text.contains("من انت")) {
-      return "أنا ألفا بوت، مساعدك الذكي الشخصي. الإصدار العاشر (V10).";
-    }
-    if (text.contains("اركان الاسلام") || text.contains("أركان الإسلام")) {
-      return "أركان الإسلام خمسة: الشهادتان، الصلاة، الزكاة، صوم رمضان، وحج البيت لمن استطاع إليه سبيلاً.";
-    }
-    if (text.contains("شكرا") || text.contains("مشكور")) {
-      return "العفو! أنا دائماً في خدمتك.";
-    }
-    return "لقد استلمت رسالتك: \"$userText\". (أنا نسخة تجريبية، وسأتعلم المزيد قريباً!)";
-  }
-
-  void _sendMessage() {
-    if (_controller.text.trim().isEmpty) return;
-    final userText = _controller.text;
+  // دالة معالجة الرسائل وتنفيذ الأوامر
+  void _processUserMessage(String userText) async {
     setState(() {
       _messages.add({"role": "user", "text": userText});
-      _messages.add({"role": "bot", "text": _getBotResponse(userText)});
     });
     _controller.clear();
     _saveMessages();
+
+    final text = userText.toLowerCase().trim();
+    String botResponse = "";
+    bool isAction = false;
+
+    // التحقق من الأوامر
+    if (text.contains("افتح جوجل") || text.contains("open google")) {
+      botResponse = "جاري فتح جوجل...";
+      isAction = true;
+      _openUrl("https://www.google.com");
+    } else if (text.contains("افتح يوتيوب") || text.contains("open youtube")) {
+      botResponse = "جاري فتح يوتيوب...";
+      isAction = true;
+      _openUrl("https://www.youtube.com");
+    } else if (text.contains("بحث عن")) {
+      final query = text.replaceAll("بحث عن", "").trim();
+      botResponse = "جاري البحث عن: $query";
+      isAction = true;
+      _openUrl("https://www.google.com/search?q=$query");
+    } else if (text.contains("سلام") || text.contains("مرحبا") || text.contains("هلا")) {
+      botResponse = "وعليكم السلام ورحمة الله وبركاته! كيف حالك اليوم؟";
+    } else if (text.contains("اسمك") || text.contains("من انت")) {
+      botResponse = "أنا ألفا بوت، مساعدك الذكي الشخصي. الإصدار العاشر (V10).";
+    } else if (text.contains("شكرا") || text.contains("مشكور")) {
+      botResponse = "العفو! أنا دائماً في خدمتك.";
+    } else {
+      botResponse = "لقد استلمت رسالتك: \"$userText\". (أنا نسخة تجريبية، وسأتعلم المزيد قريباً!)";
+    }
+
+    // إضافة رد الروبوت
+    setState(() {
+      _messages.add({"role": "bot", "text": botResponse});
+    });
+    _saveMessages();
+  }
+
+  Future<void> _openUrl(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 
   void _clearHistory() async {
@@ -135,16 +154,16 @@ class _AlphaCoreScreenState extends State<AlphaCoreScreen> {
                     controller: _controller,
                     style: const TextStyle(color: Colors.white),
                     decoration: const InputDecoration(
-                      hintText: "اكتب رسالتك هنا...",
+                      hintText: "اكتب رسالتك هنا... (مثلاً: افتح يوتيوب)",
                       hintStyle: TextStyle(color: Colors.grey),
                       border: InputBorder.none,
                     ),
-                    onSubmitted: (_) => _sendMessage(),
+                    onSubmitted: (value) => _processUserMessage(value),
                   ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.send, color: Colors.blueAccent),
-                  onPressed: _sendMessage,
+                  onPressed: () => _processUserMessage(_controller.text),
                 ),
               ],
             ),
