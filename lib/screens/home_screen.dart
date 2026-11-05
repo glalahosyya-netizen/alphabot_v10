@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:speech_to_text/speech_to_text.dart" as stt;
 import "../theme/app_theme.dart";
 import "../widgets/command_input.dart";
 import "../widgets/mic_button.dart";
@@ -18,22 +19,48 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _listening = false;
   bool _paused = false;
   String _status = "جاهز للاستماع";
+  
+  final stt.SpeechToText _speech = stt.SpeechToText();
+  String _recognizedText = "";
 
-  void _toggleMic() {
-    setState(() {
-      if (_paused) _paused = false;
-      _listening = !_listening;
-      _status = _listening ? "يستمع إليك الآن..." : "جاهز للاستماع";
+  void _toggleMic() async {
+    if (!_listening) {
+      // تهيئة الميكروفون
+      bool available = await _speech.initialize(
+        onStatus: (val) => print('Status: $val'),
+        onError: (val) => print('Error: $val'),
+      );
       
-      if (_listening) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("جاري الاستماع إلى صوتك... (وضع تجريبي)"),
-            duration: Duration(seconds: 2),
-          ),
+      if (available) {
+        setState(() {
+          _paused = false;
+          _listening = true;
+          _status = "يستمع إليك الآن...";
+        });
+        
+        // بدء الاستماع باللغة العربية
+        _speech.listen(
+          onResult: (val) => setState(() {
+            _recognizedText = val.recognizedWords;
+            if (_recognizedText.isNotEmpty) {
+              _status = _recognizedText;
+            }
+          }),
+          localeId: "ar_SA",
         );
+      } else {
+        setState(() {
+          _status = "تعذر تشغيل الميكروفون (تأكد من الصلاحيات)";
+        });
       }
-    });
+    } else {
+      // إيقاف الاستماع
+      setState(() {
+        _listening = false;
+        _status = _recognizedText.isEmpty ? "جاهز للاستماع" : _recognizedText;
+      });
+      _speech.stop();
+    }
   }
 
   void _togglePause() {
@@ -41,6 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _paused = !_paused;
       if (_paused) {
         _listening = false;
+        _speech.stop();
         _status = "متوقف مؤقتًا";
       } else {
         _status = "جاهز للاستماع";
