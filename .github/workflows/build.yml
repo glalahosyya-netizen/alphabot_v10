@@ -29,9 +29,28 @@ jobs:
           flutter create --platforms=android --project-name alphabot_v10 --org com.alphabot /tmp/scaffold
           cp -R /tmp/scaffold/android ./android
 
-      - name: Add Permissions
+      - name: Update Android Manifest
         run: |
-          sed -i 's|<application|<uses-permission android:name="android.permission.RECORD_AUDIO"/>\n    <uses-permission android:name="android.permission.INTERNET"/>\n    <queries>\n        <intent>\n            <action android:name="android.intent.action.VIEW" />\n            <data android:scheme="https" />\n        </intent>\n    </queries>\n    <application|' android/app/src/main/AndroidManifest.xml
+          cat << 'EOF' > /tmp/update_manifest.py
+          with open('android/app/src/main/AndroidManifest.xml', 'r') as f:
+              manifest = f.read()
+
+          permissions = '    <uses-permission android:name="android.permission.RECORD_AUDIO"/>\n    <uses-permission android:name="android.permission.INTERNET"/>\n'
+          queries = '''    <queries>
+              <intent>
+                  <action android:name="android.intent.action.VIEW" />
+                  <data android:scheme="https" />
+              </intent>
+          </queries>
+          '''
+
+          if '<uses-permission android:name="android.permission.RECORD_AUDIO"/>' not in manifest:
+              manifest = manifest.replace('<application', permissions + queries + '    <application')
+
+          with open('android/app/src/main/AndroidManifest.xml', 'w') as f:
+              f.write(manifest)
+          EOF
+          python3 /tmp/update_manifest.py
 
       - name: Install dependencies
         run: flutter pub get
